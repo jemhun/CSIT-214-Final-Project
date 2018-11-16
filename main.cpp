@@ -2,6 +2,7 @@
 #include <string>
 #include <fstream>
 #include <vector>
+#include <sstream>
 using namespace std;
 
 
@@ -11,7 +12,7 @@ vector<string> split(string str,string sep) {
     vector<string> arr;
     current = strtok(cstr, sep.c_str());
     while (current != NULL) {
-        arr.push_back(current);
+        arr.emplace_back(current);
         current = strtok(NULL, sep.c_str());
     }
     return arr;
@@ -30,26 +31,6 @@ public:
         isbn = _isbn;
     }
 
-
-public:
-    Book addBook(ifstream& inf) {
-        string name, writer;
-        int amount, bookNo;
-        inf.open("C:/Users/jemhu/CLionProjects/FinalProject/inputfile");
-        vector<string> arr;
-        string block;
-
-        while (getline(inf, block)) {
-            arr = split(block, "/");
-        }
-            name = arr[0];
-            writer = arr[1];
-            amount = stoi(arr[2]);
-            bookNo = stoi(arr[3]);
-
-            return Book(name, writer, amount, bookNo);
-    }
-
 public:
     string toString() {
         string description;
@@ -66,16 +47,14 @@ public:
 
 
 class Library {
-    vector<Book> collection;
 
 public:
     Library() = default;
-
+/*
 public:
     Book addBook(ifstream& inf) {
         string name, writer;
         int amount, bookNo;
-        inf.open("C:/Users/jemhu/CLionProjects/FinalProject/inputfile");
         vector<string> arr;
         string block;
 
@@ -88,7 +67,45 @@ public:
         bookNo = stoi(arr[3]);
 
         return Book(name, writer, amount, bookNo);
+
     }
+*/
+
+public:
+    void initLib(ifstream& inf, vector<Book>& collection) {
+        string name, writer;
+        int amount, bookNo, numOfLines=0;
+        vector<string> arr;
+        string block,line;
+
+        while(getline(inf,line))
+            ++numOfLines;
+        inf.clear();
+        inf.seekg(0, ios::beg);
+
+
+        for (int i=0; i< numOfLines; i++) {
+            getline(inf, block);
+            arr = split(block, "/");
+
+            name = arr[0];
+            writer = arr[1];
+            amount = stoi(arr[2]);
+            bookNo = stoi(arr[3]);
+
+            collection.emplace_back(Book(name, writer, amount, bookNo));
+            arr.clear();
+        }
+
+    }
+
+public:
+    void listBooklist(vector<Book> collection){
+        for (Book bk : collection)
+            cout << bk.toString();
+    }
+
+
 };
 
 
@@ -110,24 +127,45 @@ public:
 
 
 int main() {
-//    Book *uno = new Book("Game of Thrones", "GRR Martin", 589, 12345678);
-//    cout << uno->toString();
 
-//    ifstream lib;
-//
-//    Library what;
-//
-//    what.addCollection(lib);
+    ifstream lib;
+    vector<Book> collection;
+    Library contents;
+    lib.open("C:/Users/jemhu/CLionProjects/FinalProject/inputfile");
 
-ifstream lib;
-vector<Book> lol;
+   /* while (getline(lib,line))
+        ++numOfLines;
 
-Library conan;
+    cout << numOfLines;
+    lib.clear();
+    lib.seekg(0, ios::beg);
 
-for (int i=0; i<2; i++) {
-    conan.addBook(lib);
-}
 
+    collection.reserve(numOfLines);
+    for (int i=0; i< numOfLines; i++)
+        collection.emplace_back(contents.addBook(lib));
+
+
+    for (Book b: collection)
+        cout << b.toString() << endl;*/
+
+
+   contents.initLib(lib,collection);
+   contents.listBooklist(collection);
+
+
+
+//    string str1 = "test one two three.";
+//    vector<string> ary1;
+//    int i = 0;
+//    stringstream ssin(str1);
+//    while (ssin.good() && i < 4){
+//        ssin >> ary1[i];
+//        ++i;
+//    }
+//    for(i = 0; i < 4; i++) {
+//        cout << ary1[i] << endl;
+//    }
 
     return 0;
 }

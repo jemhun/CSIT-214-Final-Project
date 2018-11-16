@@ -5,7 +5,7 @@
 #include <sstream>
 using namespace std;
 
-
+//   METHOD TO SPLIT UP A STRING USING DELIMITERS
 vector<string> split(string str,string sep) {
     char *cstr = const_cast<char *>(str.c_str());
     char *current;
@@ -19,10 +19,12 @@ vector<string> split(string str,string sep) {
 }
 
 
+//  BOOK CLASS
 class Book {
     string title, author;
     int pages, isbn;
 
+//    BOOK CONSTRUCTOR
 public:
     Book(string _title, string _author, int _pages, int _isbn) {
         title = _title;
@@ -31,6 +33,7 @@ public:
         isbn = _isbn;
     }
 
+//    TOSTRING METHOD
 public:
     string toString() {
         string description;
@@ -45,32 +48,14 @@ public:
 
 
 
-
+//  LIBRARY CLASS
 class Library {
 
+//    DEFAULT CONSTRUCTOR
 public:
     Library() = default;
-/*
-public:
-    Book addBook(ifstream& inf) {
-        string name, writer;
-        int amount, bookNo;
-        vector<string> arr;
-        string block;
 
-        getline(inf, block);
-        arr = split(block, "/");
-
-        name = arr[0];
-        writer = arr[1];
-        amount = stoi(arr[2]);
-        bookNo = stoi(arr[3]);
-
-        return Book(name, writer, amount, bookNo);
-
-    }
-*/
-
+//  METHOD TO MAKE A LIBRARY OF BOOKS  FROM AN INPUT FILE
 public:
     void initLib(ifstream& inf, vector<Book>& collection) {
         string name, writer;
@@ -99,33 +84,17 @@ public:
 
     }
 
+//    METHOD TO LIST ALL BOOKS
 public:
     void listBooklist(vector<Book> collection){
         for (Book bk : collection)
             cout << bk.toString();
     }
 
-
 };
 
 
-//public:
-//void addCollection(ifstream& inf) {
-//    inf.open("C:/Users/jemhu/CLionProjects/FinalProject/inputfile");
-//    vector<string> arr;
-//    string block;
-//
-//    while (getline(inf, block)) {
-//        arr = split(block, "/");
-//        for (size_t i = 0; i < arr.size(); i++)
-//            printf("%s\n", arr[i].c_str());
-//    }
-//
-//}
-//};
-
-
-
+//  MAIN METHOD
 int main() {
 
     ifstream lib;
@@ -133,39 +102,8 @@ int main() {
     Library contents;
     lib.open("C:/Users/jemhu/CLionProjects/FinalProject/inputfile");
 
-   /* while (getline(lib,line))
-        ++numOfLines;
-
-    cout << numOfLines;
-    lib.clear();
-    lib.seekg(0, ios::beg);
-
-
-    collection.reserve(numOfLines);
-    for (int i=0; i< numOfLines; i++)
-        collection.emplace_back(contents.addBook(lib));
-
-
-    for (Book b: collection)
-        cout << b.toString() << endl;*/
-
-
-   contents.initLib(lib,collection);
-   contents.listBooklist(collection);
-
-
-
-//    string str1 = "test one two three.";
-//    vector<string> ary1;
-//    int i = 0;
-//    stringstream ssin(str1);
-//    while (ssin.good() && i < 4){
-//        ssin >> ary1[i];
-//        ++i;
-//    }
-//    for(i = 0; i < 4; i++) {
-//        cout << ary1[i] << endl;
-//    }
+   contents.initLib(lib,collection);    // INITIALIZES LIBRARY
+   contents.listBooklist(collection);   // LISTS CONTENT
 
     return 0;
 }
